@@ -1,0 +1,24 @@
+
+
+.chart-horizontal-grid-lines {
+    -fx-stroke: transparent;
+}
+.chart {
+    -fx-padding: 10px;
+}
+.chart-content {
+    -fx-padding: 30px;
+}
+.chart-plot-background {
+    -fx-background-color: green;
+}
+.chart-vertical-grid-lines {
+    -fx-stroke: white;
+    -fx-fill: white;
+    -fx-font-size: 14em;
+    -fx-tick-label-fill: white;
+    -fx-font-family: Tahoma;
+    -fx-tick-length: 10;
+    -fx-minor-tick-length: 10;
+    -fx-scale-y: 200;
+}
