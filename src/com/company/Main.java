@@ -7,6 +7,7 @@ public class Main {
     public static void main(String[] args) {
 	// write your code here
         //player 0 on offense is always runner
+        /*
         Team offense = new Team();
         Team defense = new Team();
 
@@ -15,10 +16,13 @@ public class Main {
         while(!tackled){
             tackled = move(offense, defense);
         }
+        */
+
+        System.out.println("Hello");
 
 
     }
-
+    /*
     public static boolean move(Team o, Team d){
         for(int a = 0; a < 11; a++){
             o.getPlayer(a).setPosition(findBestMoveOffense(o.getPlayer(a).getPosition(), d.getPlayers()));
@@ -45,6 +49,7 @@ public class Main {
     public static boolean tackle(Player d, Player runner){
         //this method can calulate the chances of a tackle based on proximity and
     }
+    */
 
 
 }
