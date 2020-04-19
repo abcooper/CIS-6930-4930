@@ -7,16 +7,23 @@ public abstract class Player {
     private int speed;
     private double x;
     private double y;
+    private int id;
+
     //private Pair position;
     //private double tackleChance;
     //private double dodgeChance;
 
 
     // constructor
-    public Player(int speed, double xPos, double yPos) {
+    public Player(int speed, double xPos, double yPos, int id) {
         this.speed = speed;
         this.x = xPos;
         this.y = yPos;
+        this.id = id;
+    }
+
+    public Player() {
+
     }
 
     // getter and setter methods
@@ -39,6 +46,14 @@ public abstract class Player {
         this.y = y;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     // difference between x-coordinates of this player and another
     public double xDifference(double x2) {
         return x - x2;
@@ -56,46 +71,9 @@ public abstract class Player {
 
     // runs along hypotenuse towards player at (x2, y2) once
     public void run(double x2, double y2) {
-        //System.out.println("Distance between points: " + computeDistance(1, 1));
-        //System.out.println("X Distance between: " + xDifference(x2));
-        //System.out.println("Y Distance between: " + yDifference(y2));
         double xChange = speed/computeDistance(x2, y2) * xDifference(x2);
         double yChange = speed/computeDistance(x2, y2) * yDifference(y2);
         x -= xChange;
         y -= yChange;
     }
-
-
-    /*
-    public double getTackleChance() {
-        return tackleChance;
-    }
-
-    public void setTackleChance(double tackleChance) {
-        this.tackleChance = tackleChance;
-    }
-
-    public double getDodgeChance() {
-        return dodgeChance;
-    }
-
-    public void setDodgeChance(double dodgeChance) {
-        this.dodgeChance = dodgeChance;
-    }
-
-    public Player(int speed) {
-        this.speed = speed;
-    }
-    public int getSpeed() {
-        return speed;
-    }
-
-    public Pair getPosition() {
-        return position;
-    }
-
-    public void setPosition(Pair position) {
-        this.position = position;
-    }
-    */
 }
