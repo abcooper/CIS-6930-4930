@@ -23,22 +23,28 @@ public class Controller {
          return seriesArrayList;
     }
 
-    public ArrayList<XYChart.Series> simAlgo(Stage primaryStage, int startLine){
+    public ArrayList<XYChart.Series> simAlgo(Plays offensePlay, Plays defensePlay, int startLine){
         ArrayList<XYChart.Series> seriesArrayList = new ArrayList<XYChart.Series>();
-        offense.getPlayers().setPosition(new XYChart.Data(startLine, 25));
-        defense.getPlayers().setPosition(new XYChart.Data(startLine + 10, 25));
-        defense.getPlayers().getSeries().getData().add(defense.getPlayers().getPosition());
+        offense.setPlay(offensePlay, startLine);
+        defense.setPlay(defensePlay,startLine);
 
         double x = startLine, y= 25, z = 0;
         while(x < 100){
-            int moveAngle = findBestAngle(offense.getPlayers().getPosition(), defense.getPlayer(0));
+            int moveAngle = findBestAngle(offense.getPlayers()[0].getPosition(), defense.getPlayers());
             System.out.println(x + " " + Math.cos(Math.toRadians(moveAngle)));
-            offense.getPlayers().setPosition(new XYChart.Data(x += Math.cos(Math.toRadians(moveAngle)) , y += Math.sin(Math.toRadians(moveAngle))));
-            offense.getPlayers().getSeries().getData().add(offense.getPlayers().getPosition());
+            offense.getPlayers()[0].setPosition(new XYChart.Data(x += Math.cos(Math.toRadians(moveAngle)) , y += Math.sin(Math.toRadians(moveAngle))));
+            offense.getPlayers()[0].getSeries().getData().add(offense.getPlayers()[0].getPosition());
         }
-        offense.getPlayers().getSeries().setName("Runner\nDistance Traveled: " + ((int) x - startLine) + " yards");
-        seriesArrayList.add(offense.getPlayers().getSeries());
-        seriesArrayList.add(defense.getPlayers().getSeries());
+        offense.getPlayers()[0].getSeries().setName("Runner\nDistance Traveled: " + ((int) x - startLine) + " yards");
+        //seriesArrayList.add(offense.getPlayers()[0].getSeries());
+
+        for(int a = 0; a < 11; a++) {
+            seriesArrayList.add(offense.getPlayers()[a].getSeries());
+        }
+        for(int a = 0; a < 11; a++) {
+            seriesArrayList.add(defense.getPlayers()[a].getSeries());
+        }
+
         return seriesArrayList;
     }
 
@@ -78,26 +84,33 @@ public class Controller {
         return series;
     }
 
-    public int findBestAngle(XYChart.Data currentPosition, ArrayList<Player> defense){
+    public int findBestAngle(XYChart.Data currentPosition, Player[] defense){
         int bestAngle = 0;
         double bestMinDistance = 0;
-        for(int angle = -90; angle <= 90; angle++){
+        for(int angle = -45; angle <= 45; angle++){
             XYChart.Data testPosition = new XYChart.Data((Double.parseDouble(currentPosition.getXValue().toString())) + Math.cos(Math.toRadians(angle)), (Double.parseDouble(currentPosition.getYValue().toString()))  + Math.sin(Math.toRadians(angle)));
             if(Double.parseDouble(testPosition.getYValue().toString()) > 0 && Double.parseDouble(testPosition.getYValue().toString()) < 50 )
             {
 
                 double minDistance = Double.MAX_VALUE;
-                for (int a = 0; a < defense.size(); a++) {
-                    double distance = calculateDistance(testPosition, defense.get(a).getPosition());
-                    if (distance < minDistance) {
-                        minDistance = distance;
+                for (int a = 0; a < defense.length; a++) {
+                    if(Double.parseDouble(testPosition.getXValue().toString()) < Double.parseDouble(defense[a].getPosition().getXValue().toString())) {
+                        double distance = calculateDistance(testPosition, defense[a].getPosition());
+                        if (distance < minDistance && distance < 10) {
+                            minDistance = distance;
+                        }
+
                     }
                 }
                 if (minDistance > bestMinDistance) {
                     bestMinDistance = minDistance;
                     bestAngle = angle;
                 }
+
             }
+        }
+        if(bestMinDistance == Double.MAX_VALUE){
+           bestAngle = 0;
         }
         return bestAngle;
     }

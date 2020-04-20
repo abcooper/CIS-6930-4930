@@ -88,10 +88,26 @@ public class Views {
 
         start.setOnAction(new EventHandler<ActionEvent>() {
 
-            //TODO: method to start simulation given inputs on main menu
             @Override
             public void handle(ActionEvent event) {
-                showSim(c.simAlgo(primaryStage, Integer.parseInt(startLineField.getText())));
+                Plays offensePlay, defensePlay;
+                if(o1.isSelected()){
+                    offensePlay = Plays.T;
+                }else if(o2.isSelected()){
+                    offensePlay = Plays.I;
+                }else{
+                    offensePlay = Plays.SHOTGUN;
+                }
+
+                if(d1.isSelected()){
+                    defensePlay = Plays.FOURFOUR;
+                }else if(d2.isSelected()){
+                    defensePlay = Plays.FIVETHREE;
+                }else{
+                    defensePlay = Plays.FIVETWO;
+                }
+
+                showSim(c.simAlgo(offensePlay, defensePlay, Integer.parseInt(startLineField.getText())));
             }
         });
         Scene scene  = new Scene(grid,900,700);
@@ -131,11 +147,11 @@ public class Views {
         for(int a = 0; a < seriesArrayList.size(); a++){
             lineChart.getData().add(seriesArrayList.get(a));
             Node line = seriesArrayList.get(a).getNode().lookup(".chart-series-line");
-            if(a >  seriesArrayList.size()/2) {
+            if(a >  seriesArrayList.size()/2 - 1) {
                 line.setStyle("-fx-stroke: red");
             }
             else if(a == 0) {
-                line.setStyle("-fx-stroke: orange");
+                line.setStyle("-fx-stroke: white");
             }
             else{
                 line.setStyle("-fx-stroke: blue");
