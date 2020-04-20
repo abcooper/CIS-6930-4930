@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class Controller {
 
     Team offense, defense;
+    private final double tackleDistance = 1;
 
     Controller() {
         offense = new Team();
@@ -29,17 +30,28 @@ public class Controller {
         offense.setPlay(offensePlay, startLine);
         defense.setPlay(defensePlay, startLine);
 
-        double x = offense.getPlayer(0).getX(), y = 25, z = 0;
+        double x = offense.getPlayer(0).getX(), y = offense.getPlayer(0).getY(), z = 0;
         while (x < 30) {
+            System.out.println(z++);
             x = isTackled(offense.getPlayer(0), defense) ? 100 : x;
             int moveAngle = findBestAngle(offense.getPlayers()[0].getPosition(), defense.getPlayers());
             offense.getPlayers()[0].setPosition(new XYChart.Data(x += Math.cos(Math.toRadians(moveAngle)), y += Math.sin(Math.toRadians(moveAngle))));
             offense.getPlayers()[0].getSeries().getData().add(offense.getPlayers()[0].getPosition());
+            for (int a = 1; a < 11; a++) {
+                for (int b = 0; b < 11; b++) {
+                    if(calculateDistance(offense.getPlayer(a).getPosition(), defense.getPlayer(b).getPosition()) < tackleDistance){
+                        defense.getPlayer(b).setBlocked();
+                        offense.getPlayer(a).setBlocked();
+                    }
+                }
+            }
             for (int a = 0; a < 11; a++) {
-                moveAngle = findDefenseAngle(defense.getPlayer(a).getPosition(), offense.getPlayer(0).getPosition());
-                if (moveAngle != Integer.MAX_VALUE) {
-                    defense.getPlayer(a).setPosition(new XYChart.Data(defense.getPlayer(a).getX() + Math.cos(Math.toRadians(moveAngle)), y + Math.sin(Math.toRadians(moveAngle))));
-                    defense.getPlayers()[a].getSeries().getData().add(defense.getPlayer(a).getPosition());
+                if(!defense.getPlayer(a).isBlocked()) {
+                    moveAngle = findDefenseAngle(defense.getPlayer(a).getPosition(), offense.getPlayer(0).getPosition());
+                    if (moveAngle != Integer.MAX_VALUE) {
+                        defense.getPlayer(a).setPosition(new XYChart.Data(defense.getPlayer(a).getX() + Math.cos(Math.toRadians(moveAngle)), defense.getPlayer(a).getY() + Math.sin(Math.toRadians(moveAngle))));
+                        defense.getPlayers()[a].getSeries().getData().add(defense.getPlayer(a).getPosition());
+                    }
                 }
             }
             x = isTackled(offense.getPlayer(0), defense) ? 100 : x;
@@ -49,10 +61,10 @@ public class Controller {
         //seriesArrayList.add(offense.getPlayers()[0].getSeries());
 
         for (int a = 0; a < 11; a++) {
-            seriesArrayList.add(offense.getPlayers()[a].getSeries());
+            seriesArrayList.add(offense.getPlayer(a).getSeries());
         }
         for (int a = 0; a < 11; a++) {
-            seriesArrayList.add(defense.getPlayers()[a].getSeries());
+            seriesArrayList.add(defense.getPlayer(a).getSeries());
         }
 
         return seriesArrayList;
@@ -123,7 +135,6 @@ public class Controller {
         if (bestMinDistance == Double.MAX_VALUE) {
             bestAngle = 0;
         }
-        System.out.println(bestMinDistance);
         return bestAngle;
     }
 
@@ -140,13 +151,12 @@ public class Controller {
     public double calculateDistance(XYChart.Data testPosition, XYChart.Data defense) {
         double xdiff = Double.parseDouble(testPosition.getXValue().toString()) - Double.parseDouble(defense.getXValue().toString());
         double ydiff = Double.parseDouble(testPosition.getYValue().toString()) - Double.parseDouble(defense.getYValue().toString());
-        //System.out.println( (Math.sqrt( Math.pow( xdiff, 2) + Math.pow( ydiff, 2)) ) );
         return Math.sqrt(Math.pow(xdiff, 2) + Math.pow(ydiff, 2));
     }
 
     public boolean isTackled(Player runner, Team defense) {
         for (int a = 0; a < defense.getPlayers().length; a++) {
-            if (calculateDistance(runner.getPosition(), defense.getPlayer(a).getPosition()) < 1) {
+            if (calculateDistance(runner.getPosition(), defense.getPlayer(a).getPosition()) < 1 && !defense.getPlayer(a).isBlocked()) {
                 return true;
             }
         }

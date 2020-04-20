@@ -9,6 +9,15 @@ public class Player {
     private double tackleChance;
     private double dodgeChance;
     private XYChart.Series series;
+    private boolean isBlocked;
+
+    public boolean isBlocked() {
+        return isBlocked;
+    }
+
+    public void setBlocked() {
+        isBlocked = true;
+    }
 
     public XYChart.Series getSeries() {
         return series;
@@ -19,6 +28,7 @@ public class Player {
     }
 
     Player(){
+        isBlocked = false;
         series = new XYChart.Series();
     }
 
@@ -58,6 +68,6 @@ public class Player {
     }
 
     public double getY(){
-        return  Double.parseDouble(position.getXValue().toString());
+        return  Double.parseDouble(position.getYValue().toString());
     }
 }
