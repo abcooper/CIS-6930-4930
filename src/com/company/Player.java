@@ -52,4 +52,12 @@ public class Player {
     public void setPosition(XYChart.Data position) {
         this.position = position;
     }
+
+    public double getX(){
+        return  Double.parseDouble(position.getXValue().toString());
+    }
+
+    public double getY(){
+        return  Double.parseDouble(position.getXValue().toString());
+    }
 }

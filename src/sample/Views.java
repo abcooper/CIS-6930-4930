@@ -81,7 +81,7 @@ public class Views {
 
         //custom start point field
         Label startLineLabel = new Label("Enter where the play will start:");
-        TextField startLineField = new TextField("0");
+        TextField startLineField = new TextField("20");
         startLineField.setMaxWidth(105);
         grid.add(startLineLabel, 0, 2);
         grid.add(startLineField, 2, 2);
