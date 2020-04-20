@@ -26,26 +26,27 @@ public class Controller {
     }
 
     public ArrayList<XYChart.Series> simAlgo(Plays offensePlay, Plays defensePlay, int startLine) {
+
         ArrayList<XYChart.Series> seriesArrayList = new ArrayList<XYChart.Series>();
         offense.setPlay(offensePlay, startLine);
         defense.setPlay(defensePlay, startLine);
 
         double x = offense.getPlayer(0).getX(), y = offense.getPlayer(0).getY(), z = 0;
-        while (x < 30) {
-            System.out.println(z++);
+        while (x < 100) {
             x = isTackled(offense.getPlayer(0), defense) ? 100 : x;
             int moveAngle = findBestAngle(offense.getPlayers()[0].getPosition(), defense.getPlayers());
             offense.getPlayers()[0].setPosition(new XYChart.Data(x += Math.cos(Math.toRadians(moveAngle)), y += Math.sin(Math.toRadians(moveAngle))));
             offense.getPlayers()[0].getSeries().getData().add(offense.getPlayers()[0].getPosition());
             for (int a = 1; a < 11; a++) {
-                for (int b = 0; b < 11; b++) {
-                    if(calculateDistance(offense.getPlayer(a).getPosition(), defense.getPlayer(b).getPosition()) < tackleDistance){
-                        defense.getPlayer(b).setBlocked();
-                        offense.getPlayer(a).setBlocked();
-                    }
+                if(!offense.getPlayer(a).isBlocked()) {
+                    moveAngle = findOLineAngle(offense.getPlayer(a), defense);
+                    offense.getPlayer(a).setPosition(new XYChart.Data(offense.getPlayer(a).getX() + Math.cos(Math.toRadians(moveAngle)), offense.getPlayer(a).getY() + Math.sin(Math.toRadians(moveAngle))));
+                    offense.getPlayer(a).getSeries().getData().add(offense.getPlayer(a).getPosition());
+                    setBlock(offense.getPlayer(a), defense);
                 }
             }
             for (int a = 0; a < 11; a++) {
+                System.out.println(defense.getPlayer(a).isBlocked());
                 if(!defense.getPlayer(a).isBlocked()) {
                     moveAngle = findDefenseAngle(defense.getPlayer(a).getPosition(), offense.getPlayer(0).getPosition());
                     if (moveAngle != Integer.MAX_VALUE) {
@@ -142,6 +143,7 @@ public class Controller {
         double xdiff = Double.parseDouble(currentPosition.getXValue().toString()) - Double.parseDouble(runner.getXValue().toString());
         double ydiff = Double.parseDouble(currentPosition.getYValue().toString()) - Double.parseDouble(runner.getYValue().toString());
         if (xdiff < 0) {
+            System.out.println("Stopped");
             return Integer.MAX_VALUE;
         }
 
@@ -162,4 +164,33 @@ public class Controller {
         }
         return false;
     }
+
+    public int findOLineAngle(Player player, Team defense){
+        int closest = 0;
+        double closestDistance = Double.MAX_VALUE, temp;
+        for(int a =0;a<defense.getPlayers().length; a++){
+            if(!defense.getPlayer(a).isBlocked()) {
+                if ((temp = calculateDistance(player.getPosition(), defense.getPlayer(a).getPosition())) < closestDistance) {
+                    closest = a;
+                    closestDistance = temp;
+                }
+            }
+        }
+        double xdiff = defense.getPlayer(closest).getX() - player.getX();
+        double ydiff = defense.getPlayer(closest).getY() - player.getY();
+
+        System.out.println((int) Math.toDegrees(Math.atan2(ydiff, xdiff)));
+        return (int) Math.toDegrees(Math.atan2(ydiff, xdiff));
+    }
+
+    public void setBlock(Player player, Team defense) {
+        for (int a = 0; a < defense.getPlayers().length; a++) {
+            if (calculateDistance(player.getPosition(), defense.getPlayer(a).getPosition()) < tackleDistance && !defense.getPlayer(a).isBlocked()) {
+                player.setBlocked();
+                defense.getPlayer(a).setBlocked();
+                System.out.println("Blocked: " + a);
+            }
+        }
+    }
+
 }
