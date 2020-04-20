@@ -148,7 +148,7 @@ public class Views {
             lineChart.getData().add(seriesArrayList.get(a));
             Node line = seriesArrayList.get(a).getNode().lookup(".chart-series-line");
             if(a >  seriesArrayList.size()/2 - 1) {
-                line.setStyle("-fx-stroke: red");
+                line.setStyle("-fx-stroke: #fc0303");
             }
             else if(a == 0) {
                 line.setStyle("-fx-stroke: white");

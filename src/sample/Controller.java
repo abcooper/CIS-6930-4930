@@ -35,8 +35,10 @@ public class Controller {
         while (x < 100) {
             x = isTackled(offense.getPlayer(0), defense) ? 100 : x;
             int moveAngle = findBestAngle(offense.getPlayers()[0].getPosition(), defense.getPlayers());
-            offense.getPlayers()[0].setPosition(new XYChart.Data(x += Math.cos(Math.toRadians(moveAngle)), y += Math.sin(Math.toRadians(moveAngle))));
-            offense.getPlayers()[0].getSeries().getData().add(offense.getPlayers()[0].getPosition());
+            System.out.println(offense.getPlayer(0).isBlocked());
+            offense.getPlayer(0).setPosition(new XYChart.Data(x += Math.cos(Math.toRadians(moveAngle)), y += Math.sin(Math.toRadians(moveAngle))));
+            offense.getPlayer(0).getSeries().getData().add(offense.getPlayers()[0].getPosition());
+            setBlock(offense.getPlayer(0), defense);
             for (int a = 1; a < 11; a++) {
                 if(!offense.getPlayer(a).isBlocked()) {
                     moveAngle = findOLineAngle(offense.getPlayer(a), defense);
@@ -46,16 +48,17 @@ public class Controller {
                 }
             }
             for (int a = 0; a < 11; a++) {
-                System.out.println(defense.getPlayer(a).isBlocked());
                 if(!defense.getPlayer(a).isBlocked()) {
                     moveAngle = findDefenseAngle(defense.getPlayer(a).getPosition(), offense.getPlayer(0).getPosition());
                     if (moveAngle != Integer.MAX_VALUE) {
                         defense.getPlayer(a).setPosition(new XYChart.Data(defense.getPlayer(a).getX() + Math.cos(Math.toRadians(moveAngle)), defense.getPlayer(a).getY() + Math.sin(Math.toRadians(moveAngle))));
                         defense.getPlayers()[a].getSeries().getData().add(defense.getPlayer(a).getPosition());
+                        setBlock(defense.getPlayer(a), offense);
                     }
                 }
             }
-            x = isTackled(offense.getPlayer(0), defense) ? 100 : x;
+
+            x = offense.getPlayer(0).isBlocked() ? 100 : x;
 
         }
         offense.getPlayers()[0].getSeries().setName("Runner\nDistance Traveled: " + ((int) offense.getPlayer(0).getX() - startLine) + " yards");
@@ -118,9 +121,9 @@ public class Controller {
 
                 double minDistance = Double.MAX_VALUE;
                 for (int a = 0; a < defense.length; a++) {
-                    if (Double.parseDouble(testPosition.getXValue().toString()) < Double.parseDouble(defense[a].getPosition().getXValue().toString())) {
+                    if (Double.parseDouble(testPosition.getXValue().toString()) < Double.parseDouble(defense[a].getPosition().getXValue().toString()) && !defense[a].isBlocked() ) {
                         double distance = calculateDistance(testPosition, defense[a].getPosition());
-                        if (distance < minDistance && distance < 10) {
+                        if (distance < minDistance && distance < 5) {
                             minDistance = distance;
                         }
 
@@ -143,7 +146,6 @@ public class Controller {
         double xdiff = Double.parseDouble(currentPosition.getXValue().toString()) - Double.parseDouble(runner.getXValue().toString());
         double ydiff = Double.parseDouble(currentPosition.getYValue().toString()) - Double.parseDouble(runner.getYValue().toString());
         if (xdiff < 0) {
-            System.out.println("Stopped");
             return Integer.MAX_VALUE;
         }
 
@@ -179,7 +181,7 @@ public class Controller {
         double xdiff = defense.getPlayer(closest).getX() - player.getX();
         double ydiff = defense.getPlayer(closest).getY() - player.getY();
 
-        System.out.println((int) Math.toDegrees(Math.atan2(ydiff, xdiff)));
+
         return (int) Math.toDegrees(Math.atan2(ydiff, xdiff));
     }
 
@@ -188,7 +190,6 @@ public class Controller {
             if (calculateDistance(player.getPosition(), defense.getPlayer(a).getPosition()) < tackleDistance && !defense.getPlayer(a).isBlocked()) {
                 player.setBlocked();
                 defense.getPlayer(a).setBlocked();
-                System.out.println("Blocked: " + a);
             }
         }
     }
