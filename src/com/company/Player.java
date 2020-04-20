@@ -1,12 +1,26 @@
 package com.company;
 
+import javafx.scene.chart.XYChart;
 import javafx.util.Pair;
 
 public class Player {
     private int speed;
-    private Pair position;
+    private XYChart.Data position;
     private double tackleChance;
     private double dodgeChance;
+    private XYChart.Series series;
+
+    public XYChart.Series getSeries() {
+        return series;
+    }
+
+    public void setSeries(XYChart.Series series) {
+        this.series = series;
+    }
+
+    Player(){
+        series = new XYChart.Series();
+    }
 
     public double getTackleChance() {
         return tackleChance;
@@ -31,11 +45,11 @@ public class Player {
         return speed;
     }
 
-    public Pair getPosition() {
+    public XYChart.Data getPosition() {
         return position;
     }
 
-    public void setPosition(Pair position) {
+    public void setPosition(XYChart.Data position) {
         this.position = position;
     }
 }

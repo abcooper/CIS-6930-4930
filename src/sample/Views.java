@@ -91,7 +91,7 @@ public class Views {
             //TODO: method to start simulation given inputs on main menu
             @Override
             public void handle(ActionEvent event) {
-                showSim(c.sim(primaryStage, Integer.parseInt(startLineField.getText())));
+                showSim(c.simAlgo(primaryStage, Integer.parseInt(startLineField.getText())));
             }
         });
         Scene scene  = new Scene(grid,900,700);
@@ -135,7 +135,7 @@ public class Views {
                 line.setStyle("-fx-stroke: red");
             }
             else if(a == 0) {
-                line.setStyle("-fx-stroke: white");
+                line.setStyle("-fx-stroke: orange");
             }
             else{
                 line.setStyle("-fx-stroke: blue");

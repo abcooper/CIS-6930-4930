@@ -1,17 +1,21 @@
 package com.company;
 
+import java.util.ArrayList;
+
 public class Team {
-    private Player[] players;
+    private Player players;
 
     public Team(){
-        players = new Player[11];
+        players = new Player();
     }
 
-    public Player[] getPlayers(){
+    public Player getPlayers(){
         return players;
     }
 
-    public Player getPlayer(int a){
-        return players[a];
+    public ArrayList<Player> getPlayer(int a){
+        ArrayList<Player> list = new ArrayList<Player>();
+        list.add(players);
+        return list;
     }
 }
