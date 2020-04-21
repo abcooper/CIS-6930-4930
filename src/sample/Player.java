@@ -70,4 +70,5 @@ public class Player {
     public double getY(){
         return  Double.parseDouble(position.getYValue().toString());
     }
+
 }
