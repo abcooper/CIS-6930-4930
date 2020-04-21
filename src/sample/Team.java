@@ -1,9 +1,6 @@
-package com.company;
+package sample;
 
 import javafx.scene.chart.XYChart;
-import sample.Plays;
-
-import java.util.ArrayList;
 
 public class Team {
     private Player[] players;
@@ -113,5 +110,8 @@ public class Team {
             players[a].getSeries().getData().add(players[a].getPosition());
         }
 
+    }
+    public Player getRunner(){
+        return players[0];
     }
 }

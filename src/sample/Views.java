@@ -15,7 +15,6 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -107,7 +106,7 @@ public class Views {
                     defensePlay = Plays.FIVETWO;
                 }
 
-                showSim(c.simAlgo(offensePlay, defensePlay, Integer.parseInt(startLineField.getText())));
+                showSim(c.runPlay(offensePlay, defensePlay, Integer.parseInt(startLineField.getText())));
             }
         });
         Scene scene  = new Scene(grid,900,700);

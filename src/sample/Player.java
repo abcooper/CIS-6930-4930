@@ -1,4 +1,4 @@
-package com.company;
+package sample;
 
 import javafx.scene.chart.XYChart;
 import javafx.util.Pair;
