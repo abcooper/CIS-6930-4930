@@ -1,0 +1,22 @@
+
+.chart-vertical-grid-lines {
+    -fx-stroke: black;
+    -fx-fill: black;
+    -fx-tick-length: 10;
+    -fx-minor-tick-length: 10;
+    -fx-scale-y: 200;
+    -fx-opacity: 0;
+}
+
+.chart-horizontal-grid-lines {
+    -fx-stroke: transparent;
+}
+.chart {
+    -fx-padding: 10px;
+}
+.chart-content {
+    -fx-padding: 30px;
+}
+.chart-plot-background {
+    -fx-background-color: green;
+}
